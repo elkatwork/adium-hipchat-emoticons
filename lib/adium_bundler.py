@@ -42,6 +42,7 @@ Emot = namedtuple('Emot', ('name', 'imgbase', 'imgpath', 'shortcuts'))
 def merge_identical_emoticons(emoticons):
     emotedict = {}
     for emot in emoticons:
+        # import pdb; pdb.set_trace()
         imgname = os.path.basename(emot['image'])
         emotobj = emotedict.get(imgname)
         shortcut = unescape(emot['shortcut'])

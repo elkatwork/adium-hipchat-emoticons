@@ -4,8 +4,9 @@ import logging
 
 try:
     from ghost import Ghost
+    from PyQt4 import QtCore
     ghost_available = True
-except ImportError:
+except:
     ghost_available = False
 
 HIPCHAT_URL = 'https://hipchat.com/'
@@ -27,7 +28,7 @@ def fetch_emoticons_ghost(username, password):
     login(ghost, username, password)
     emoticons = dom_extract(ghost)
 
-    return emoticons
+    return map(cleanup_qt_strings, emoticons)
 
 def fetch_emoticons_json(github_repo):
     raw_github = github_repo.replace('//github.com', '//raw.github.com')
@@ -53,3 +54,13 @@ def dom_extract(ghost):
     emoticons, resources = ghost.evaluate('emoticons.emoticons')
 
     return emoticons
+
+def cleanup_qt_strings(emot_dict):
+    result = {}
+
+    for key, value in emot_dict.iteritems():
+        key = str(key)
+        if isinstance(value, QtCore.QString):
+            value = str(value)
+        result[key] = value
+    return result
